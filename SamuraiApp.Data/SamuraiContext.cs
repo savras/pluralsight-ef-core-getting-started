@@ -13,7 +13,7 @@ namespace SamuraiApp.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // We pulled in Microsoft.EntityFrameworkCore.SqlServer
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=SamuraiData; Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=(local); Database=SamuraiData; Trusted_Connection=True;");
         }
     }
 }
