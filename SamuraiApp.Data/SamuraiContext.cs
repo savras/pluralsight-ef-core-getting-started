@@ -14,6 +14,11 @@ namespace SamuraiApp.Data
         {
             modelBuilder.Entity<SamuraiBattle>()
                 .HasKey(s => new {s.BattleId, s.SamuraiId});
+
+            // Tell EF that this relationship is mandatory.
+            //modelBuilder.Entity<Samurai>()
+            //    .Property(s => s.SecretIdentity).IsRequired();
+
             base.OnModelCreating(modelBuilder);
         }
 

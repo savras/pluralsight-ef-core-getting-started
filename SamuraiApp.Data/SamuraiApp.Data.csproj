@@ -153,6 +153,10 @@
     <Compile Include="Migrations\20170327142353_init.designer.cs">
       <DependentUpon>20170327142353_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20170329033932_SamuraiBattleJoinTable.cs" />
+    <Compile Include="Migrations\20170329033932_SamuraiBattleJoinTable.designer.cs">
+      <DependentUpon>20170329033932_SamuraiBattleJoinTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\SamuraiContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SamuraiContext.cs" />
