@@ -8,3 +8,4 @@ Pluralsight tutorial for EF Core.
 - get-help entityframework
 - Update-Database
 - Script-Migration
+- add-migration MigrationName

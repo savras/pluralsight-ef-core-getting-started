@@ -9,7 +9,14 @@ namespace SamuraiApp.Data
         public DbSet<Battle> Battles { get; set; }
         public DbSet<Quote> Quotes { get; set; }
 
-        // EF will call this internally.
+        // EF will call these internally.
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SamuraiBattle>()
+                .HasKey(s => new {s.BattleId, s.SamuraiId});
+            base.OnModelCreating(modelBuilder);
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // We pulled in Microsoft.EntityFrameworkCore.SqlServer
