@@ -23,13 +23,13 @@ namespace SamuraiApp.Data.Migrations
                         column: x => x.BattleId,
                         principalTable: "Battles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_SamuraiBattle_Samurais_SamuraiId",
                         column: x => x.SamuraiId,
                         principalTable: "Samurais",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
