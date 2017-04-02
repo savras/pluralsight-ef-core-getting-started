@@ -161,11 +161,16 @@
     <Compile Include="Migrations\20170329035326_SecretIdentity.designer.cs">
       <DependentUpon>20170329035326_SecretIdentity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20170330122831_SamuraiBattleNoCasadeFix.cs" />
+    <Compile Include="Migrations\20170330122831_SamuraiBattleNoCasadeFix.designer.cs">
+      <DependentUpon>20170330122831_SamuraiBattleNoCasadeFix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\SamuraiContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SamuraiContext.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyLoggerProvider.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

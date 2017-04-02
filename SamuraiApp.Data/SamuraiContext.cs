@@ -26,6 +26,8 @@ namespace SamuraiApp.Data
         {
             // We pulled in Microsoft.EntityFrameworkCore.SqlServer
             optionsBuilder.UseSqlServer("Server=(local); Database=SamuraiData; Trusted_Connection=True;");
+
+            optionsBuilder.EnableSensitiveDataLogging();
         }
     }
 }
