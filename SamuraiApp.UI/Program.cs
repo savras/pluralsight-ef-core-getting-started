@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
 using SamuraiApp.Data;
@@ -43,7 +44,18 @@ namespace SamuraiApp.UI
 
         private static void InsertSamurai()
         {
-            var samurai = new Samurai {Name = "Vincent"};
+            var samurai = new Samurai
+            {
+                Name = "Vincent",
+                Quotes = new List<Quote>
+                {
+                    new Quote
+                    {
+                        Text = "I AM the one!"
+                    }
+                }
+            };
+
             Context.Samurais.Add(samurai);
             Context.SaveChanges();
         }
