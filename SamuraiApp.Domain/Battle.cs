@@ -9,6 +9,6 @@ namespace SamuraiApp.Domain
         public string Name { get; set; }
         public DateTime StartDAte { get; set; }
         public DateTime EndDate { get; set; }
-        public List<SamuraiBattle> SamuraiBattles { get; set; }
+        public List<SamuraiBattle> SamuraiBattles { get; set; } // Nav property
     }
 }
