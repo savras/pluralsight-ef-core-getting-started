@@ -18,7 +18,7 @@ namespace SamuraiApp.UI
             _context.Database.EnsureCreated();
             _context.GetService<ILoggerFactory>().AddProvider(new MyLoggerProvider());
 
-            InsertNewPkFkGraph();
+            ExplicitLoadWithFilter();
             //InsertSamurai();
             //InsertMultipleSamurais();
             //SimpleSamuraiQuery();
@@ -176,7 +176,7 @@ namespace SamuraiApp.UI
         private static void ExplicitLoadWithFilter()
         {
             _context = new SamuraiContext();
-            var samurai = _context.Samurais.First();
+            var samurai = _context.Samurais.First(s => s.Id == 15);
 
             // Does't work.
             //_context.Entry(samurai)
@@ -188,8 +188,19 @@ namespace SamuraiApp.UI
             _context.Entry(samurai)
                 .Collection(s => s.Quotes)
                 .Query()
-                .Where(q => q.Text.Contains("happy"))
+                .Where(q => q.Text.Contains("save"))
                 .Load();
+        }
+        #endregion
+
+        #region Use Related Data for filtering - without pulling down the related data.
+
+        private static void UsingRelatedDataForFilterAndMore()
+        {
+            _context = new SamuraiContext();
+            var samurai = _context.Samurais
+                .Where(s => s.Quotes.Any(q => q.Text.Contains("happy")))    // We are not pulling down the Quotes 'related data'.
+                .ToList();
         }
         #endregion
     }
