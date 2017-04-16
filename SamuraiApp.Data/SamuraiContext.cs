@@ -8,6 +8,7 @@ namespace SamuraiApp.Data
         public DbSet<Samurai> Samurais { get; set; }
         public DbSet<Battle> Battles { get; set; }
         public DbSet<Quote> Quotes { get; set; }
+        public DbSet<SamuraiBattle> SamuraiBattles { get; set; }
 
         // EF will call these internally.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
