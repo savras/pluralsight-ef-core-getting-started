@@ -90,12 +90,37 @@ namespace SamuraiApp.UI
         }
         #endregion
 
-        #region Eager loading
+        #region Eager loading (the .Include)
 
         private static void EagerLoadingWithInclude()
         {
             _context = new SamuraiContext(); // Run without result of previous queries affecting the next queries from this point.
             var samuraiWithQuotes = _context.Samurais.Include(s => s.Quotes).ToList();
+        }
+
+        private static void EagerLoadingToManyAkaChildrenGrandchildren()
+        {
+            _context = new SamuraiContext();
+            var samuraiWithBattles = _context.Samurais
+                .Include(s => s.SamuraiBattles)
+                .ThenInclude(sb => sb.Battle)   // This is new to EF Core
+                .ToList(); // End with LINQ execution method.
+        }
+
+        private static void EagerLoadingWithFind_NOPE()
+        {
+            // Can't do .Include().Find().ToList;..
+            // Find() checks with context to see if the entity to find is already
+            // tracked. Otherwise go retrieve the entity in the database.
+            // Why can't use with .Include()?
+        }
+        private static void EagerLoadingWithMultipleBranches()
+        {
+            _context = new SamuraiContext();
+            var samuraiWithBattles = _context.Samurais
+                .Include(s => s.Quotes)
+                .Include(s => s.SecretIdentity)
+                .ToList();
         }
 
         #endregion
