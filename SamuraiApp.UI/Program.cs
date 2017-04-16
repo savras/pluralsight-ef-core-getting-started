@@ -26,6 +26,7 @@ namespace SamuraiApp.UI
         }
 
         #region Basic Inserts based on entity relationships
+
         // 1-to-1 relationship insert. EF will insert the Samurai, return the PK, then insert the Quotes (in batches if many) using the Samurai PK
         private static void InsertNewPkFkGraph()
         {
@@ -75,22 +76,23 @@ namespace SamuraiApp.UI
         {
             _context.Battles.AddRange(new List<Battle>
             {
-                new Battle { Name = "Samurai Wars", StartDAte = DateTime.Now, EndDate = DateTime.Now.AddYears(25)},
-                new Battle { Name = "Return of the Samurai", StartDAte = DateTime.Now, EndDate = DateTime.Now.AddYears(25)},
-                new Battle { Name = "The Samurai Strikes Back", StartDAte = DateTime.Now, EndDate = DateTime.Now.AddYears(25)}
+                new Battle {Name = "Samurai Wars", StartDAte = DateTime.Now, EndDate = DateTime.Now.AddYears(25)},
+                new Battle {Name = "Return of the Samurai", StartDAte = DateTime.Now, EndDate = DateTime.Now.AddYears(25)},
+                new Battle {Name = "The Samurai Strikes Back", StartDAte = DateTime.Now, EndDate = DateTime.Now.AddYears(25)}
             });
-            
+
         }
 
         private static void AddManyToManyWithFks()
         {
-            var sb = new SamuraiBattle { SamuraiId = 1, BattleId = 1};  // Only need the two main Ids.
+            var sb = new SamuraiBattle {SamuraiId = 1, BattleId = 1}; // Only need the two main Ids.
             _context.SamuraiBattles.Add(sb);
             _context.SaveChanges();
         }
+
         #endregion
 
-        #region Eager loading (the .Include)
+        #region Eager loading (the .Include). Cannot be used with filters, sorting .etc
 
         private static void EagerLoadingWithInclude()
         {
@@ -103,7 +105,7 @@ namespace SamuraiApp.UI
             _context = new SamuraiContext();
             var samuraiWithBattles = _context.Samurais
                 .Include(s => s.SamuraiBattles)
-                .ThenInclude(sb => sb.Battle)   // This is new to EF Core
+                .ThenInclude(sb => sb.Battle) // This is new to EF Core
                 .ToList(); // End with LINQ execution method.
         }
 
@@ -114,6 +116,7 @@ namespace SamuraiApp.UI
             // tracked. Otherwise go retrieve the entity in the database.
             // Why can't use with .Include()?
         }
+
         private static void EagerLoadingWithMultipleBranches()
         {
             _context = new SamuraiContext();
@@ -123,6 +126,71 @@ namespace SamuraiApp.UI
                 .ToList();
         }
 
+        #endregion
+
+        #region Projection query - use LINQ Select function to pick and choose properties of result.
+
+        private static void AnonymousTypeViaProjection()
+        {
+            _context = new SamuraiContext();
+            var quotes = _context.Quotes
+                .Select(q => new {q.Id, q.Text})
+                .ToList();
+        }
+
+        private static void AnonymousTypeViaProjectionWithRelated()
+        {
+            _context = new SamuraiContext();
+            var samurais = _context.Samurais
+                .Select(s => new
+                {
+                    s.Id,
+                    s.SecretIdentity.RealName,
+                    QuoteCount = s.Quotes.Count() // N + 1 because EF will construct query to get each quote and count them
+                })
+                .
+                ToList();
+        }
+
+        private static void RelatedDataFixUp()
+        {
+            _context = new SamuraiContext();
+            var samurai = _context.Samurais.Find(1);
+
+            // samurai variable above will also have Quotes because change tracker will see that it is requesting Quotes of a 'Related data', so it will 'Fix up' the entity.
+            var quotes = _context.Quotes.Where(q => q.SamuraiId == 1).ToList();
+        }
+
+        #endregion
+
+        #region Explicit loading - using .Entry() from Change Tracking API. Will track objects and navigation fixup will happen.
+
+        private static void ExplicitLoad()
+        {
+            _context = new SamuraiContext();
+            var samurai = _context.Samurais.First();
+            _context.Entry(samurai).Collection(s => s.Quotes).Load();
+            _context.Entry(samurai).Reference(s => s.SecretIdentity).Load();
+        }
+
+        private static void ExplicitLoadWithFilter()
+        {
+            _context = new SamuraiContext();
+            var samurai = _context.Samurais.First();
+
+            // Does't work.
+            //_context.Entry(samurai)
+            //    .Collection(s => s.Quotes
+            //        .Where(q => q.Text.Contains("happy")))
+            //    .Load();
+
+            // Use this instead.
+            _context.Entry(samurai)
+                .Collection(s => s.Quotes)
+                .Query()
+                .Where(q => q.Text.Contains("happy"))
+                .Load();
+        }
         #endregion
     }
 }
